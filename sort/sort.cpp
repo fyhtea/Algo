@@ -99,7 +99,7 @@ inline void Sort<T>::quicksort2(T* xs, int l, int u)
     j=u;
     while(1){
       while(i<u && xs[++i]<xs[pivot]);
-      while(j>=1 && xs[pivot]<xs[--j]);
+      while(j>=l && xs[pivot]<xs[--j]);
       if(j<i) break;
       swap(xs[i], xs[j]);
   }
