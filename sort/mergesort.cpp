@@ -15,6 +15,7 @@ using namespace std;
 
 template<typename T> class MergeSort{
     private:
+        void kmerge(T* x, T* tmp, int l, int m, int u);
 
     public:
         /*
@@ -22,9 +23,39 @@ template<typename T> class MergeSort{
          */ 
         void msort(T* x, int l, int u);
 
-
+        void kmsort(T* x, T* tmp, int l, int u);
+        
         void test(int N);
 };
+
+template<typename T>
+inline void MergeSort<T>::kmerge(T* x, T* tmp, int l, int m, int u){
+    int i,j,k;
+    i=k=l; j=m;
+    while(i<m && j<u){
+        tmp[k++] = x[i]<x[j]? x[i++]:x[j++];
+    }
+    while(i<m){
+        tmp[k++]=x[i++];
+    }
+    while(j<u){
+        tmp[k++]=x[j++];
+    }
+    //memcpy((void*)(x),(void*)(tmp),sizeof(T)*(u));
+    while(l<u){x[l]=tmp[l++];}
+}
+
+template<typename T>
+inline void MergeSort<T>::kmsort(T *x, T *tmp, int l, int u){
+    int m;
+    if(l<u-1){
+        m=l+(u-l)/2;
+        kmsort(x, tmp, l, m);
+        kmsort(x, tmp, m, u);
+        kmerge(x, tmp, l, m, u);
+    }
+}
+
 
 template<typename T>
 inline void MergeSort<T>::msort(T* xs, int l, int u){
@@ -50,15 +81,15 @@ inline void MergeSort<T>::msort(T* xs, int l, int u){
 
 template<typename T>
     void MergeSort<T>::test(int N){
-        int x[N];
+        int x[N],tmp[N];
         cout<<"origin sequence:";
         for(int i=0; i<N; i++){
             x[i] = Random(15);
             cout<<x[i]<<' ';
         }
         cout<<endl;
-        cout<<"test for MergeSort:"<<endl;
-        msort(x, 0, N);
+        cout<<"test for kMergeSort:"<<endl;
+        kmsort(x, tmp, 0, N);
         for(int j:x){
             cout<<j<<' ';
         }
