@@ -17,16 +17,50 @@ template<typename T> class MergeSort{
     private:
         void kmerge(T* x, T* tmp, int l, int m, int u);
 
+        
+        void naive_merge(T* x, int l, int m, int u);
+        
     public:
         /*
          * Basic version
          */ 
         void msort(T* x, int l, int u);
 
+        // basic in-palce merge
+        void msort2(T* x, int l, int u);
+
         void kmsort(T* x, T* tmp, int l, int u);
         
         void test(int N);
 };
+
+template<typename T>
+inline void MergeSort<T>::naive_merge(T* x, int l, int m, int u){
+    int i;
+    T tmp;
+    for(;l<m && m<u;++l){
+        if(x[l]>=x[m]){
+            tmp = x[m];
+            for(i=m; i>l;--i){
+                x[i]=x[i-1];    
+            }
+            x[l] = tmp;
+            m++;
+        }
+    }
+}
+
+
+template<typename T>
+void MergeSort<T>::msort2(T* x, int l, int u){
+    int m;
+    if(l<u-1){
+        m = l+(u-l)/2;
+        msort2(x, l, m);
+        msort2(x, m, u);
+        naive_merge(x, l, m, u);
+    }
+}
 
 template<typename T>
 inline void MergeSort<T>::kmerge(T* x, T* tmp, int l, int m, int u){
@@ -89,7 +123,8 @@ template<typename T>
         }
         cout<<endl;
         cout<<"test for kMergeSort:"<<endl;
-        kmsort(x, tmp, 0, N);
+       // kmsort(x, tmp, 0, N);
+        msort2(x, 0, N);
         for(int j:x){
             cout<<j<<' ';
         }
