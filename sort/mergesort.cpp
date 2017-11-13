@@ -17,8 +17,11 @@ template<typename T> class MergeSort{
     private:
         void kmerge(T* x, T* tmp, int l, int m, int u);
 
-        
+        //for basic in-palce MergeSort        
         void naive_merge(T* x, int l, int m, int u);
+        
+        //improvement of naive
+        void wmerge(T *x, int i, int m, int j, int n, int k;
         
     public:
         /*
@@ -31,8 +34,52 @@ template<typename T> class MergeSort{
 
         void kmsort(T* x, T* tmp, int l, int u);
         
+        // wmerge
+        void imsort(T* x, int l, int u);
+        void wsort(T *x, int l, int u, int w);
+
+        void msort3();
+
         void test(int N);
 };
+
+template<typename T> 
+inline void MergeSort<T>::wsort(T *x, int l, int u, int w){
+    int m;
+    if(l<u-1){
+        m = l+(u-l)/2;
+        imsort(xs, l, m);
+        imsort(xs, m, u);
+        wmerge(xs, l, m, m, u, w);
+    }
+    else{
+        while(l<u){
+
+        }
+    }
+}
+
+
+template<typename T>
+inline void MergeSort<T>::wmerge(T *x, int i, int m, int j, int n, int k){
+    while(i<m && j<n){
+        if (x[i]<x[j]){
+            swap(x[k], x[i]);
+            i++;
+        }else{
+            swap(x[k], x[j]);
+            j++;
+        }
+        k++;
+    }
+    while(i<m){
+        swap(x[k++], x[i++]);
+    }
+    while(j<m){
+        swap(x[k++]. x[j++])
+    }
+}
+
 
 template<typename T>
 inline void MergeSort<T>::naive_merge(T* x, int l, int m, int u){
