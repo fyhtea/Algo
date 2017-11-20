@@ -7,7 +7,7 @@
 
 #ifndef _SLIST_H
 #define _SLIST_H
-#endif
+
 
 #include <assert.h>
 
@@ -74,7 +74,7 @@ inline int CSList<T>::IsEmpty() const{
 }
 
 template<typename T>
-inline CSList<T>::AddHead(const T data){
+inline int  CSList<T>::AddHead(const T data){
     CNode<T> *pNewNode;
 
     pNewNode=new CNode<T>;
@@ -155,7 +155,7 @@ inline int CSList<T>::InsertAfter(const int pos, const T data){
     assert(1<=pos && pos<=m_nCount);
 
     pTmpNode = m_pNodeHead;
-    for(i=0; i<pos; i++){
+    for(i=1; i<pos; i++){
         pTmpNode = pTmpNode->next;
     }
 
@@ -300,9 +300,9 @@ inline T CSList<T>::GetAt(const int pos) const
 }
 
 
-template<typename>
+template<typename T>
 inline void CSList<T>::SetAt(const int pos, T data){
-    assert(m_nCount!=0;pos<=m_nCount);
+    assert(m_nCount!=0 && pos<=m_nCount);
     
     CNode<T> *pTmpNode = m_pNodeHead;
 
@@ -325,3 +325,5 @@ inline int CSList<T>::Find(const T data) const{
     }
     return 0;
 }
+
+#endif
