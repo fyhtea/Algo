@@ -1,11 +1,18 @@
 ## Learning Algorithm
 
+### #Data Structure
+
+- List
+
+
 ### #Sort
 
-- quicksort
-- mergesort
-
+- QuickSort
+- MergeSort
+- InsertSort
+- BubbelSort
+- SelectionSort
 
 ### #Search
 
-- k-selection based on quiksort partition
+- k-Selection based on quiksort partition
