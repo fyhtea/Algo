@@ -3,7 +3,7 @@
 ### #Data Structure
 
 - List
-
+- Stack(2017.11.21)
 
 ### #Sort
 
