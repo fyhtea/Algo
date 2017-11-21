@@ -3,7 +3,8 @@
 ### #Data Structure
 
 - List
-- Stack(2017.11.21)
+- Stack based on List
+- Queue based on List
 
 ### #Sort
 
