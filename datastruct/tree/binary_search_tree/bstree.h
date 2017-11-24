@@ -21,6 +21,7 @@ public:
     Node<T> *right;
 
     Node(T key):key(key),parent(nullptr),left(nullptr),right(nullptr) {}
+    Node(const Node<T>& x):key(x.key),parent(x.parent),left(x.left),right(x.right) {}
     /*~Node(){
         delete left;
         delete right;
@@ -40,7 +41,9 @@ class BsTree{
     private:
     void DestroyNode(Node<T> *x);
     void Destroy();
-
+    
+    void Transplant(Node<T> *u, Node<T> *v);
+    void RemoveNode(Node<T> *x);
     public:
     //traverse
     void InOrderWalk(Node<T> *x);
@@ -48,8 +51,10 @@ class BsTree{
     void PostOderWalk(Node<T> *x);
     
     //search
-    Node<T>& TreeSearch(Node<T> *x, T k);
-
+    private:
+    Node<T>* TreeSearch(Node<T> *x, T k);
+    public:
+    Node<T>* Search(T k);
     //max & min
     Node<T>* TreeMax(Node<T> *x);
     Node<T>* TreeMin(Node<T> *x);
@@ -65,7 +70,7 @@ class BsTree{
 
     //insertion & deletion
     void TreeInsert(T k);
-    void TreeDelete(T k);
+    void TreeDelete(Node<T> *x);
 };
 template<typename T>
 inline BsTree<T>::BsTree():root(nullptr) {}
@@ -88,6 +93,30 @@ template<typename T>
 inline void BsTree<T>::Destroy(){
     DestroyNode(root);
     root = nullptr;
+}
+
+template<typename T>
+inline void BsTree<T>::Transplant(Node<T> *u, Node<T> *v){
+    if(u->parent == nullptr){
+       // root=v;
+    }else if(u->parent->left == u){
+        u->parent->left = v;
+    }else{
+        u->parent->right = v;
+    }
+    if(v != nullptr){
+        v->parent = u->parent;
+    }
+}
+
+template<typename T>
+inline void BsTree<T>::RemoveNode(Node<T> *x){
+    if(x){
+        x->left=nullptr;
+        x->right=nullptr;
+        x->parent=nullptr;
+    }
+    delete x;
 }
 
 template<typename T>
@@ -124,15 +153,20 @@ inline void BsTree<T>::PostOderWalk(Node<T> *x){
 }
 
 template<typename T>
-inline Node<T>& BsTree<T>::TreeSearch(Node<T> *x, T k){
+inline Node<T>* BsTree<T>::TreeSearch(Node<T> *x, T k){
     if(x==nullptr || x->key==k){
         return x;
     }
     else if(k<x->key){
         return TreeSearch(x->left, k);
     }else{
-        return TreeSearch(x->left, k);
+        return TreeSearch(x->right, k);
     }
+}
+
+template<typename T>
+inline Node<T>* BsTree<T>::Search(T k){
+    return TreeSearch(root,k);
 }
 
 template<typename T>
@@ -212,4 +246,24 @@ inline void BsTree<T>::TreeInsert(T k){
     }
 }
 
+template<typename T>
+inline void BsTree<T>::TreeDelete(Node<T> *x){
+    if(x->left ==nullptr){
+        Transplant(x, x->right);
+    }else if(x->right == nullptr){
+        Transplant(x, x->left);
+    }else{
+        Node<T> *y = TreeMin(x->right);
+
+        if(y->parent != x){
+            Transplant(y, y->right);
+            y->right = x->right;
+            y->right->parent = y;
+        }
+        Transplant(x, y);
+        y->left = x->left;
+        y->left->parent = y;
+    }
+    RemoveNode(x);
+}
 #endif

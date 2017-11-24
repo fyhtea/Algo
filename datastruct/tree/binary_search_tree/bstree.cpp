@@ -20,5 +20,15 @@ int main(){
     bstree.TreeInsert(5);
 
     bstree.Traverse();
+    
+    Node<int> *x=bstree.Search(4);
+    if(x==nullptr){
+        cout<<"search error!"<<endl;
+    }else{
+        cout<<"find:"<<x->key<<endl;
+    }
+    bstree.TreeDelete(x);
+    
+    bstree.Traverse();
     return 0;
 }
