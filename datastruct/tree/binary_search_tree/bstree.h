@@ -235,7 +235,7 @@ inline void BsTree<T>::TreeInsert(T k){
         }    
     }
 
-    in_node->parent == y;
+    in_node->parent = y;
 
     if(y==nullptr){
         root = in_node;
@@ -264,6 +264,6 @@ inline void BsTree<T>::TreeDelete(Node<T> *x){
         y->left = x->left;
         y->left->parent = y;
     }
-    RemoveNode(x);
+//    RemoveNode(x);
 }
 #endif

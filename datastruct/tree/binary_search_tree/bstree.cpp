@@ -21,7 +21,7 @@ int main(){
 
     bstree.Traverse();
     
-    Node<int> *x=bstree.Search(4);
+    Node<int> *x=bstree.Search(1);
     if(x==nullptr){
         cout<<"search error!"<<endl;
     }else{
