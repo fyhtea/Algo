@@ -5,6 +5,7 @@
 - List
 - Stack based on List
 - Queue based on List
+- Binary Search Tree
 
 ### #Sort
 
