@@ -44,7 +44,8 @@ class BsTree{
     
     void Transplant(Node<T> *u, Node<T> *v);
     void RemoveNode(Node<T> *x);
-    public:
+    
+    private:
     //traverse
     void InOrderWalk(Node<T> *x);
     void PreOderWalk(Node<T> *x);
@@ -56,8 +57,12 @@ class BsTree{
     public:
     Node<T>* Search(T k);
     //max & min
+    private:
     Node<T>* TreeMax(Node<T> *x);
     Node<T>* TreeMin(Node<T> *x);
+    public:
+    Node<T>* Max();
+    Node<T>* Min();
 
     //successor & predecessor 
     Node<T>* TreeSuccessor(Node<T> *x);
@@ -72,6 +77,17 @@ class BsTree{
     void TreeInsert(T k);
     void TreeDelete(Node<T> *x);
 };
+template<typename T>
+inline Node<T>* BsTree<T>::Max(){
+    return TreeMax(root);
+}
+
+template<typename T>
+inline Node<T>* BsTree<T>::Min(){
+    return TreeMin(root);
+}
+
+
 template<typename T>
 inline BsTree<T>::BsTree():root(nullptr) {}
 
@@ -133,7 +149,7 @@ inline void BsTree<T>::InOrderWalk(Node<T> *x){
 template<typename T>
 inline void BsTree<T>::PreOderWalk(Node<T> *x){
     if(x!=nullptr){
-        cout<<x->key;
+        cout<<x->key<<endl;
         PreOderWalk(x->left);
         PreOderWalk(x->right);
     }else{
@@ -215,7 +231,14 @@ inline Node<T>* BsTree<T>::TreePredecessor(Node<T> *x){
 
 template<typename T>
 inline void BsTree<T>::Traverse(){
+    cout<<"InOrderWalk:"<<endl;
     InOrderWalk(root);
+
+    cout<<"PreOderWalk:"<<endl;
+    PreOderWalk(root);
+
+    cout<<"PostOderWalk:"<<endl;
+    PostOderWalk(root);
 }
 
 
@@ -264,6 +287,6 @@ inline void BsTree<T>::TreeDelete(Node<T> *x){
         y->left = x->left;
         y->left->parent = y;
     }
-//    RemoveNode(x);
+    RemoveNode(x);
 }
 #endif
