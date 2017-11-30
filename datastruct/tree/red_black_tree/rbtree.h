@@ -46,9 +46,17 @@ class RbTree{
     // ((a, x, b), y, c) ===> (a, x, (b, y, c))
     void RightRotate(Node<T> *x);
 
+    void InOrderWalk(Node<T> *x);
+    void PreOrderWalk(Node<T> *x);
+    void PostOrderWalk(Node<T> *x);
+
+
+
     public:
     void InsertFix(Node<T> *x);
     void TreeInsert(T k);
+    void Traverse();
+
 };
 
 template<typename T>
@@ -90,6 +98,52 @@ inline void RbTree<T>::RightRotate(Node<T> *x){
 
     x->right = y;
     y->parent = x;
+}
+
+template<typename T>
+inline void RbTree<T>::InOrderWalk(Node<T> *x){
+    if(x!=nil){
+        InOrderWalk(x->left);
+        cout<<x->key<<endl;
+        InOrderWalk(x->right);
+    }else{
+        return;
+    }
+}
+
+template<typename T>
+inline void RbTree<T>::PreOrderWalk(Node<T> *x){
+    if(x != nil){
+        cout<<x->key<<endl;
+        PreOrderWalk(x->left);
+        PreOrderWalk(x->right);
+    }else{
+        return;
+    }
+}
+
+template<typename T>
+inline void RbTree<T>::PostOrderWalk(Node<T> *x){
+    if(x != nil){
+        PostOrderWalk(x->left);
+        PostOrderWalk(x->right);
+        cout<<x->key<<endl;
+    }else{
+        return;
+    }
+}
+
+
+template<typename T>
+inline void RbTree<T>::Traverse(){
+    cout<<"InOrderWalk:"<<endl;
+    InOrderWalk(root);
+
+    cout<<"PreOrderWalk:"<<endl;
+    PreOrderWalk(root);
+
+    cout<<"PostOrderWalk:"<<endl;
+    PostOrderWalk(root);
 }
 
 template<typename T>
