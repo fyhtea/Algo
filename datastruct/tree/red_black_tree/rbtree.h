@@ -23,22 +23,21 @@ public:
 
     Node(T k, Color c=Color::RED):key(k),color(c),parent(nullptr),
                                   left(nullptr),right(nullptr) {}
-    Node(const Node<T> &x):key(x.key),color(x.color),parent(x.parent)
+    Node(const Node<T> &x):key(x.key),color(x.color),parent(x.parent),
                            left(x.left),right(x.right) {} 
     //~Node(){ }
 };
-
 
 template<typename T>
 class RbTree{
     
     private:
     Node<T> *root;
-    const Node<T> *nil; 
+    Node<T> *nil; 
     
     public:
     RbTree();
-    ~BsTree();
+    //~RbTree();
 
     private:
     // (a, x, (b, y, c)) ===> ((a, x, b), y, c)
@@ -53,12 +52,28 @@ class RbTree{
     void Transplant(Node<T> *u, Node<T> *v);
 
 
+    //max & min
+    
+    Node<T>* TreeMax(Node<T> *x);
+    Node<T>* TreeMin(Node<T> *x); 
+    
+
     public:
     void InsertFix(Node<T> *x);
     void TreeInsert(T k);
     void Traverse();
-
+    void TreeDelete(Node<T> *z);
+    void DeleteFixup(Node<T> *x);
 };
+
+template<typename T>
+inline RbTree<T>::RbTree(){
+    nil = new Node<T>(0);
+    nil->parent = nil;
+    nil->left = nil;
+    nil->right = nil;
+    root = nil;
+}
 
 template<typename T>
 inline void RbTree<T>::LeftRotate(Node<T> *x){
@@ -68,7 +83,7 @@ inline void RbTree<T>::LeftRotate(Node<T> *x){
         y->left->parent = x;
     }
     y->parent = x->parent;
-    if x->parent== nil{
+    if (x->parent == nil){
         root = y;
     }else if(x == x->parent->left){
         x->parent->left = y;
@@ -135,6 +150,22 @@ inline void RbTree<T>::PostOrderWalk(Node<T> *x){
 }
 
 template<typename T>
+inline Node<T>* RbTree<T>::TreeMax(Node<T> *x){
+    while(x->right != nil){
+        x = x->right;
+    }
+    return x; 
+}
+
+template<typename T>
+inline Node<T>* RbTree<T>::TreeMin(Node<T> *x){
+    while(x->left != nil){
+        x = x->left;
+    }
+    return x;
+}
+
+template<typename T>
 inline void RbTree<T>::Transplant(Node<T> *u, Node<T> *v){
     if(u->parent == nil){
         root = v;
@@ -178,23 +209,30 @@ inline void RbTree<T>::TreeInsert(T k){
     in_node->parent = y;
 
     if(y == nil){
-        root = x;
-    }else if(x->key < y->key){
-        y->left = x;
+        root = in_node;
+    }else if(in_node->key < y->key){
+        y->left = in_node;
     }else{
-        y->right = x;
+        y->right = in_node;
     }
 
-    x->left = nil;
-    x->right = nil;
-    x->color = Color::RED;
-
-    InsertFix(x);
+    in_node->left = nil;
+    in_node->right = nil;
+    in_node->color = Color::RED;
+    if(in_node->parent != nil){
+        if(in_node->parent->parent != nil){
+            if(in_node->parent->parent->parent != nil){
+            InsertFix(in_node);
+            }
+        }
+    }
+    //InsertFix(in_node);
 }
 
 template<typename T>
 inline void RbTree<T>::InsertFix(Node<T> *x){
     Node<T> *y;
+    
     while(x->parent->color == Color::RED){
         
         if(x->parent == x->parent->parent->left){
@@ -239,6 +277,102 @@ inline void RbTree<T>::InsertFix(Node<T> *x){
         }
     }
     root->color = Color::BLACK;
+}
+
+template<typename T>
+inline void RbTree<T>::TreeDelete(Node<T> *z){
+    Node<T> *y = z;
+    Node<T> *x;
+    Color y_origin_color = y->color;
+    
+    // if z has only one child node
+    if (z->left == nil){
+        x = z->right;
+        Transplant(z, z->right);
+    }else if(z->right == nil){
+        x = z->left;
+        Transplant(z, z->left);
+    }else{
+        //if z has two children, let y=z->successor take z's position
+        y = TreeMin(z->right);           
+        y_origin_color = y->color;        
+        x = y->right;
+        if(y->parent == z){
+            x->parent = y;
+        }else{
+            Transplant(y, y->right);
+            y->right = z->right;
+            y->right->parent = y;
+        }
+        Transplant(z, y);
+        y->left = z->left;
+        y->left->parent = y;
+        y->color = z->color;
+    }
+    if (y_origin_color == Color::BLACK){
+        DeleteFixup(x);
+    }
+}
+
+template<typename T>
+inline void RbTree<T>::DeleteFixup(Node<T> *x){
+    Node<T> *w;
+    while(x != root && x->color==Color::BLACK){
+        if(x == x->parent->left){
+            w = x->parent->right;
+            if(w->color = Color::RED){
+                w->color = Color::BLACK;                    
+                x->parent->color = Color::RED;
+                LeftRotate(x->parent);
+                w = x->parent->right;
+            }
+            if(w->left->color == Color::BLACK && w->right->color == Color::BLACK){
+                w->color == Color::RED;
+                x = x->parent;
+            }
+            else{
+                if(w->right->color == Color::BLACK){
+                    w->left->color = Color::BLACK;
+                    w->color = Color::RED;
+                    RightRotate(w);
+                    w = x->parent->right;
+                }else{
+                    w->color = x->parent->color;
+                    x->parent->color = Color::BLACK;
+                    w->right->color = Color::BLACK;
+                    LeftRotate(x->parent);
+                    x = root;
+                }
+            }
+        }else{
+            w = x->parent->left;
+            if(w->color == Color::RED){
+                w->color = Color::BLACK;
+                x->parent->color = Color::RED;
+                RightRotate(x->parent);
+                w = x->parent->left;                    // case1 
+            }
+            if(w->left->color == Color::BLACK && w->right->color == Color::BLACK){
+                w->color = Color::RED;
+                x = x->parent;                          // case2 
+            }
+            else{ 
+                if(w->left->color == Color::BLACK){
+                    w->right->color = Color::BLACK;
+                    w->color = Color::RED;
+                    LeftRotate(w);
+                    w = x->parent->left;
+                }else{
+                    w->color = x->parent->color;
+                    x->parent->color = Color::BLACK;
+                    x->left->color = Color::BLACK;
+                    RightRotate(w);
+                    x = root;
+                }    
+            }
+        }
+    }
+    x->color = Color::BLACK;
 }
 
 #endif
