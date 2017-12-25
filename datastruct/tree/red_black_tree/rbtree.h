@@ -50,6 +50,7 @@ class RbTree{
     void PreOrderWalk(Node<T> *x);
     void PostOrderWalk(Node<T> *x);
 
+    void Transplant(Node<T> *u, Node<T> *v);
 
 
     public:
@@ -131,6 +132,18 @@ inline void RbTree<T>::PostOrderWalk(Node<T> *x){
     }else{
         return;
     }
+}
+
+template<typename T>
+inline void RbTree<T>::Transplant(Node<T> *u, Node<T> *v){
+    if(u->parent == nil){
+        root = v;
+    }else if(u == u->parent->left){
+        u->parent->left = v;
+    }else{
+        u->parent->right = v;
+    }
+    v->parent = u->parent;
 }
 
 
