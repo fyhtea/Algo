@@ -33,7 +33,7 @@ class RbTree{
     
     private:
     Node<T> *root;
-    Node<T> *nil; 
+    Node<T> *NIL; 
     
     public:
     RbTree();
@@ -57,8 +57,11 @@ class RbTree{
     Node<T>* TreeMax(Node<T> *x);
     Node<T>* TreeMin(Node<T> *x); 
     
+    Node<T>* TreeSearch(Node<T> *x, T k);
+        
 
     public:
+    Node<T>* Search(T k);
     void InsertFix(Node<T> *x);
     void TreeInsert(T k);
     void Traverse();
@@ -68,22 +71,24 @@ class RbTree{
 
 template<typename T>
 inline RbTree<T>::RbTree(){
-    nil = new Node<T>(0);
-    nil->parent = nil;
-    nil->left = nil;
-    nil->right = nil;
-    root = nil;
+    NIL = new Node<T>(0);
+    root = NIL;
+    NIL->right = root;
+    NIL->left = root;
+    NIL->parent = root;
+    NIL->color = Color::BLACK;
 }
 
 template<typename T>
 inline void RbTree<T>::LeftRotate(Node<T> *x){
+
     Node<T> *y = x->right;
     x->right = y->left;
-    if (y->left != nil){
+    if (y->left != NIL){
         y->left->parent = x;
     }
     y->parent = x->parent;
-    if (x->parent == nil){
+    if (x->parent == NIL){
         root = y;
     }else if(x == x->parent->left){
         x->parent->left = y;
@@ -99,12 +104,12 @@ inline void RbTree<T>::RightRotate(Node<T> *x){
     Node<T> *y = x->parent;
     
     y->left = x->right;
-    if (x->left != nil){
+    if (x->left != NIL){
         x->left->parent = y;
     }
     
     x->parent = y->parent;
-    if(y->parent == nil){
+    if(y->parent == NIL){
         root = x;
     }else if(y == y->parent->left){
         y->parent->left = x;
@@ -118,7 +123,7 @@ inline void RbTree<T>::RightRotate(Node<T> *x){
 
 template<typename T>
 inline void RbTree<T>::InOrderWalk(Node<T> *x){
-    if(x!=nil){
+    if(x!=NIL){
         InOrderWalk(x->left);
         cout<<x->key<<endl;
         InOrderWalk(x->right);
@@ -129,7 +134,7 @@ inline void RbTree<T>::InOrderWalk(Node<T> *x){
 
 template<typename T>
 inline void RbTree<T>::PreOrderWalk(Node<T> *x){
-    if(x != nil){
+    if(x != NIL){
         cout<<x->key<<endl;
         PreOrderWalk(x->left);
         PreOrderWalk(x->right);
@@ -140,7 +145,7 @@ inline void RbTree<T>::PreOrderWalk(Node<T> *x){
 
 template<typename T>
 inline void RbTree<T>::PostOrderWalk(Node<T> *x){
-    if(x != nil){
+    if(x != NIL){
         PostOrderWalk(x->left);
         PostOrderWalk(x->right);
         cout<<x->key<<endl;
@@ -151,7 +156,7 @@ inline void RbTree<T>::PostOrderWalk(Node<T> *x){
 
 template<typename T>
 inline Node<T>* RbTree<T>::TreeMax(Node<T> *x){
-    while(x->right != nil){
+    while(x->right != NIL){
         x = x->right;
     }
     return x; 
@@ -159,7 +164,7 @@ inline Node<T>* RbTree<T>::TreeMax(Node<T> *x){
 
 template<typename T>
 inline Node<T>* RbTree<T>::TreeMin(Node<T> *x){
-    while(x->left != nil){
+    while(x->left != NIL){
         x = x->left;
     }
     return x;
@@ -167,7 +172,7 @@ inline Node<T>* RbTree<T>::TreeMin(Node<T> *x){
 
 template<typename T>
 inline void RbTree<T>::Transplant(Node<T> *u, Node<T> *v){
-    if(u->parent == nil){
+    if(u->parent == NIL){
         root = v;
     }else if(u == u->parent->left){
         u->parent->left = v;
@@ -190,14 +195,33 @@ inline void RbTree<T>::Traverse(){
     PostOrderWalk(root);
 }
 
+
+template<typename T>
+inline Node<T>* RbTree<T>::TreeSearch(Node<T> *x, T k){
+    if(x==NIL || x->key==k){
+        return x;
+    }
+    else if(k<x->key){
+        return TreeSearch(x->left, k);
+    }else{
+        return TreeSearch(x->right, k);
+    }
+}
+
+template<typename T>
+inline Node<T>* RbTree<T>::Search(T k){
+    return TreeSearch(root,k);
+}
+
+
 template<typename T>
 inline void RbTree<T>::TreeInsert(T k){
     
     Node<T> *in_node = new Node<T>(k);
-    Node<T> *y = nil;
+    Node<T> *y = NIL;
     Node<T> *x = root;
 
-    while(x != nil){
+    while(x != NIL){
         y = x;
         if (in_node->key < x->key){
             x = x->left;
@@ -208,7 +232,7 @@ inline void RbTree<T>::TreeInsert(T k){
 
     in_node->parent = y;
 
-    if(y == nil){
+    if(y == NIL){
         root = in_node;
     }else if(in_node->key < y->key){
         y->left = in_node;
@@ -216,63 +240,64 @@ inline void RbTree<T>::TreeInsert(T k){
         y->right = in_node;
     }
 
-    in_node->left = nil;
-    in_node->right = nil;
+    in_node->left = NIL;
+    in_node->right = NIL;
     in_node->color = Color::RED;
-    if(in_node->parent != nil){
+   /* if(in_node->parent != nil){
         if(in_node->parent->parent != nil){
             if(in_node->parent->parent->parent != nil){
             InsertFix(in_node);
             }
         }
-    }
-    //InsertFix(in_node);
+    }*/
+    InsertFix(in_node);
 }
 
 template<typename T>
 inline void RbTree<T>::InsertFix(Node<T> *x){
     Node<T> *y;
     
-    while(x->parent->color == Color::RED){
+    while(x->parent != NIL && x->parent->color == Color::RED){
         
         if(x->parent == x->parent->parent->left){
             y = x->parent->parent->right;
             
-            if(y->color == Color::RED){                      //
+            if(y != NIL && y->color == Color::RED){                      //
                 x->parent->color = Color::BLACK;             //
                 y->color = Color::BLACK;                     //
                 x->parent->parent->color = Color::RED;       //
                 x = x->parent->parent;                       //  case1
+                
             }else{
 
                 if(x == x->parent->right){
                     x = x->parent;                           //
                     LeftRotate(x);                           //  case2->3
-                }
-
+                }    
+                
                 x->parent->color = Color::BLACK;             //
                 x->parent->parent->color = Color::RED;       //
-                RightRotate(x->parent->parent);              //  case3
+                RightRotate(x->parent->parent);              //  case 
             }
-        
         }else{
             y = x->parent->parent->left;
 
             if(y->color == Color::RED){
-                y->parent->color = Color::BLACK;
+                x->parent->color = Color::BLACK;
                 y->color = Color::BLACK;
                 x->parent->parent->color = Color::RED;
                 x = x->parent->parent;
+               
             }else{
                 
                 if(x == x->parent->left){
                     x = x->parent;
                     RightRotate(x);
+               
                 }
-
-                x->parent->color = Color::BLACK;
-                x->parent->parent->color = Color::RED;
-                LeftRotate(x->parent->parent);
+                    x->parent->color = Color::BLACK;
+                    x->parent->parent->color = Color::RED;
+                    LeftRotate(x->parent->parent);
             }
         }
     }
@@ -286,10 +311,10 @@ inline void RbTree<T>::TreeDelete(Node<T> *z){
     Color y_origin_color = y->color;
     
     // if z has only one child node
-    if (z->left == nil){
+    if (z->left == NIL){
         x = z->right;
         Transplant(z, z->right);
-    }else if(z->right == nil){
+    }else if(z->right == NIL){
         x = z->left;
         Transplant(z, z->left);
     }else{
@@ -320,7 +345,7 @@ inline void RbTree<T>::DeleteFixup(Node<T> *x){
     while(x != root && x->color==Color::BLACK){
         if(x == x->parent->left){
             w = x->parent->right;
-            if(w->color = Color::RED){
+            if(w->color == Color::RED){
                 w->color = Color::BLACK;                    
                 x->parent->color = Color::RED;
                 LeftRotate(x->parent);

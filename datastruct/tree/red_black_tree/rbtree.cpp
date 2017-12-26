@@ -18,26 +18,26 @@ int main(){
     rbtree.TreeInsert(2);
     rbtree.TreeInsert(5);
     rbtree.TreeInsert(7);
-//    rbtree.TreeInsert(15);
-//    rbtree.TreeInsert(3);
-//    rbtree.TreeInsert(6);
+    rbtree.TreeInsert(15);
+   // rbtree.TreeInsert(1);
+    rbtree.TreeInsert(6);
 
     rbtree.Traverse();
     
-    //Node<int> *x=bstree.Search(5);
-    //if(x==nullptr){
-    //    cout<<"search error!"<<endl;
-    //}else{
-    //    cout<<"find:"<<x->key<<endl;
+    Node<int> *x=rbtree.Search(5);
+    if(x==nullptr){
+        cout<<"search error!"<<endl;
+    }else{
+        cout<<"find:"<<x->key<<endl;
     //    cout<<"predecessor"<<bstree.TreePredecessor(x)->key<<endl;
     //    cout<<"successor"<<bstree.TreeSuccessor(x)->key<<endl;
-    //}
+    }
     
     //cout<<"TreeMax:"<<bstree.Max()->key<<endl;
     //cout<<"TreeMin:"<<bstree.Min()->key<<endl;
 
-    //bstree.TreeDelete(x);
+    rbtree.TreeDelete(x);
     
-    //bstree.Traverse();
+    rbtree.Traverse();
     return 0;
 }
