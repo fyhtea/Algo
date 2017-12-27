@@ -19,7 +19,7 @@ int main(){
     rbtree.TreeInsert(5);
     rbtree.TreeInsert(7);
     rbtree.TreeInsert(15);
-   // rbtree.TreeInsert(1);
+    //rbtree.TreeInsert(1); // bug exists when insert equal elements(rotate)  
     rbtree.TreeInsert(6);
 
     rbtree.Traverse();
@@ -29,8 +29,8 @@ int main(){
         cout<<"search error!"<<endl;
     }else{
         cout<<"find:"<<x->key<<endl;
-    //    cout<<"predecessor"<<bstree.TreePredecessor(x)->key<<endl;
-    //    cout<<"successor"<<bstree.TreeSuccessor(x)->key<<endl;
+        cout<<"predecessor"<<rbtree.TreePredecessor(x)->key<<endl;
+        cout<<"successor"<<rbtree.TreeSuccessor(x)->key<<endl;
     }
     
     //cout<<"TreeMax:"<<bstree.Max()->key<<endl;

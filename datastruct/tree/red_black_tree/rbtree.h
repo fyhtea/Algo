@@ -21,11 +21,14 @@ public:
     Node<T> *left;
     Node<T> *right;
 
+    //Construct Function
+    Node():key(-1),color(Color::RED),parent(nullptr),
+           left(nullptr),right(nullptr) {}
     Node(T k, Color c=Color::RED):key(k),color(c),parent(nullptr),
                                   left(nullptr),right(nullptr) {}
     Node(const Node<T> &x):key(x.key),color(x.color),parent(x.parent),
                            left(x.left),right(x.right) {} 
-    //~Node(){ }
+    ~Node(){ }
 };
 
 template<typename T>
@@ -37,26 +40,30 @@ class RbTree{
     
     public:
     RbTree();
-    //~RbTree();
+    ~RbTree();
 
     private:
+    void DestroyNode(Node<T> *x);
+
     // (a, x, (b, y, c)) ===> ((a, x, b), y, c)
     void LeftRotate(Node<T> *x);
     // ((a, x, b), y, c) ===> (a, x, (b, y, c))
     void RightRotate(Node<T> *x);
+    void Transplant(Node<T> *u, Node<T> *v);
 
     void InOrderWalk(Node<T> *x);
     void PreOrderWalk(Node<T> *x);
     void PostOrderWalk(Node<T> *x);
 
-    void Transplant(Node<T> *u, Node<T> *v);
-
-
+    public:
     //max & min
-    
     Node<T>* TreeMax(Node<T> *x);
     Node<T>* TreeMin(Node<T> *x); 
     
+    //successor & predecessor
+    Node<T>* TreeSuccessor(Node<T> *x);
+    Node<T>* TreePredecessor(Node<T> *x);
+
     Node<T>* TreeSearch(Node<T> *x, T k);
         
 
@@ -70,13 +77,28 @@ class RbTree{
 };
 
 template<typename T>
-inline RbTree<T>::RbTree(){
-    NIL = new Node<T>(0);
+inline RbTree<T>::RbTree():NIL(new Node<T>()){
+    //NIL = new Node<T>();
     root = NIL;
     NIL->right = root;
     NIL->left = root;
     NIL->parent = root;
     NIL->color = Color::BLACK;
+}
+
+template<typename T>
+inline void RbTree<T>::DestroyNode(Node<T> *x){
+    if(x!=NIL){
+        DestroyNode(x->left);
+        DestroyNode(x->right);
+        delete x;
+    }
+}
+
+template<typename T>
+inline RbTree<T>::~RbTree(){
+    DestroyNode(root);
+    delete NIL;
 }
 
 template<typename T>
@@ -195,6 +217,33 @@ inline void RbTree<T>::Traverse(){
     PostOrderWalk(root);
 }
 
+template<typename T>
+inline Node<T>* RbTree<T>::TreeSuccessor(Node<T> *x){
+    if(x->right != NIL){
+        return TreeMin(x->right);
+    }else{
+        Node<T> *tmp = x->parent;
+        while(tmp != NIL && tmp->right == x){
+            x = tmp;
+            tmp = tmp->parent;
+        }
+        return tmp;
+    }
+}
+
+template<typename T>
+inline Node<T>* RbTree<T>::TreePredecessor(Node<T> *x){
+    if(x->left != NIL){
+        return TreeMax(x->left);
+    }else{
+        Node<T> *tmp = x->parent;
+        while(tmp != NIL && tmp->left == x){
+            x = tmp;
+            tmp = tmp->parent;
+        }
+        return tmp;
+    }
+} 
 
 template<typename T>
 inline Node<T>* RbTree<T>::TreeSearch(Node<T> *x, T k){
@@ -243,13 +292,6 @@ inline void RbTree<T>::TreeInsert(T k){
     in_node->left = NIL;
     in_node->right = NIL;
     in_node->color = Color::RED;
-   /* if(in_node->parent != nil){
-        if(in_node->parent->parent != nil){
-            if(in_node->parent->parent->parent != nil){
-            InsertFix(in_node);
-            }
-        }
-    }*/
     InsertFix(in_node);
 }
 
