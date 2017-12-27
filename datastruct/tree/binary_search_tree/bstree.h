@@ -108,7 +108,7 @@ inline void BsTree<T>::DestroyNode(Node<T> *x){
 template<typename T>
 inline void BsTree<T>::Destroy(){
     DestroyNode(root);
-    root = nullptr;
+    //root = nullptr;
 }
 
 template<typename T>
