@@ -22,3 +22,9 @@
 
 
 ### #Dynamic Programming
+
+- Cutting Rod
+- Matiix Multiplication Chain
+- Longest Common Sequence
+- Optimal Binary Search Tree
+
