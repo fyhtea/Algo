@@ -28,3 +28,6 @@
 - Longest Common Sequence
 - Optimal Binary Search Tree
 
+### #Greedy Algorithm
+
+- Activity-Selection
