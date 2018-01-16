@@ -1,8 +1,5 @@
 # coding=utf-8
 
-import numpy as np
-
-
 def is_suffix(stra, strb):
     """
     determine whether string a is a suffix of string b
@@ -31,20 +28,17 @@ def transition_func(p, alphabet):
     for q in range(0, m+1):
         for char in alphabet:
             k = min(m+1, q+2)
-            k -= 1
-            while is_suffix(p[1:k], p[1:q]+char) is not True:
+            while is_suffix(p[1:k], p[1:q+1]+char) is not True:
                 k -= 1
-
-            trans_func[(q, char)] = k
+            trans_func[(q, char)] = k - 1
     return trans_func
 
 
 def string_automata(text, transfunc, m):
     """
-
-    :param text:
-    :param transfunc:
-    :param m:
+    :param text:  input string
+    :param transfunc:  transition function
+    :param m: length of the pattern string
     :return:
     """
 
@@ -55,16 +49,17 @@ def string_automata(text, transfunc, m):
         if q == m:
             print('Pattern occurs with shift %d' % (i-m))
 
-#test
 
-pattern = '0ababaca'
+# test
 
-text = '0acaaaa'
+pattern = '0aca'
 
-alpha = 'abc'
+text = '0aaacaaaa'
+
+alpha = 'ac'
 
 trans = transition_func(pattern, alpha)
 
-print(trans)
+#print(trans)
 
 string_automata(text, trans, 3)

@@ -31,3 +31,9 @@
 ### #Greedy Algorithm
 
 - Activity-Selection
+
+### #String Matching
+
+- Naive Method
+- Rabin-Karp
+- Automata
