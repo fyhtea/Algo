@@ -37,3 +37,4 @@
 - Naive Method
 - Rabin-Karp
 - Automata
+- Knuth-Morris-Pratt
