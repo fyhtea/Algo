@@ -16,5 +16,6 @@ int main(){
     graph.insert_edge(5,5,1);
 
     graph.print_graph();
-    graph.bfs_search();
+    graph.bfs_search(0);
+    graph.bfs_search(1);
 }

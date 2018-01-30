@@ -31,7 +31,7 @@ class graph_adj{
 	void print_graph();
 
     //traverse
-    void bfs_search();
+    void bfs_search(VertexIDType sourceID);
     void dfs_search();
 
 	private:
@@ -73,23 +73,21 @@ void graph_adj<VertexIDType,EdgeType>::print_graph(){
 }
 
 template<typename VertexIDType, typename EdgeType>
-void graph_adj<VertexIDType, EdgeType>::bfs_search(){
-    int *vertex_color=new int[num_vertices]; 
+void graph_adj<VertexIDType, EdgeType>::bfs_search(VertexIDType sourceID){
     
-    //array<int, nums> vertex_color;
-    //array<int, nums> vertex_dist;
-    //array<int, nums> vertex_pi;
+    int vertex_color[num_vertices]={0}; 
     queue<int> vertex_que;
+    vertex_que.push(sourceID);
 
-    vertex_que.push(0);
+
     while(!vertex_que.empty()){
         VertexIDType vertex = vertex_que.front();
         vertex_que.pop();
 
         for(auto pair:adj_list[vertex]){
             if (vertex_color[pair.first] == 0){
-                cout<<pair.first<<"--->";
-                vertex_color[pair.first] == 1;
+                cout<<pair.first<<"--->"; 
+                vertex_color[pair.first] = 1;
     //            vertex_dist[pair.first] += 1;
     //            vertex_pi[pair.first] == vertex;
                 vertex_que.push(pair.first);
