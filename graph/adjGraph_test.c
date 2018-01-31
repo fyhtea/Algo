@@ -18,4 +18,5 @@ int main(){
     graph.print_graph();
     graph.bfs_search(0);
     graph.bfs_search(1);
+    graph.dfs_search(2);
 }

@@ -11,6 +11,7 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<stack>
 #include<array>
 
 
@@ -32,7 +33,10 @@ class graph_adj{
 
     //traverse
     void bfs_search(VertexIDType sourceID);
-    void dfs_search();
+    void dfs_search(VertexIDType sourceID);
+    private:
+    //void dfs_visit(VertexIDType sourceID, int* vertex_color);
+
 
 	private:
 	int num_vertices;
@@ -99,4 +103,26 @@ void graph_adj<VertexIDType, EdgeType>::bfs_search(VertexIDType sourceID){
     cout<<endl;
 
 }
+
+template<typename VertexIDType, typename EdgeType>
+void graph_adj<VertexIDType, EdgeType>::dfs_search(VertexIDType sourceID){
+    
+    int vertex_color[num_vertices]={0};
+    stack<VertexIDType> vertex_stack;
+    vertex_stack.push(sourceID);
+    vertex_color[sourceID] = 1;
+    while(!vertex_stack.empty()){
+        VertexIDType vertex = vertex_stack.top();
+        vertex_stack.pop();
+        cout<<vertex<<' ';
+        for(auto pair:adj_list[vertex]){
+            if (vertex_color[pair.first] == 0){
+                vertex_color[pair.first] = 1;
+                vertex_stack.push(pair.first);
+            }    
+        }
+        vertex_color[vertex] = 2;
+    }
+}
+
 #endif
