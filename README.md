@@ -6,7 +6,8 @@
 - Stack based on List
 - Queue based on List
 - Binary Search Tree
-- Red Black Tree 
+- Red Black Tree
+- DisjointSet(with tree)
 
 ### #Sort
 
@@ -38,3 +39,5 @@
 - Rabin-Karp
 - Automata
 - Knuth-Morris-Pratt
+
+### #Graph
