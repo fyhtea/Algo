@@ -40,4 +40,6 @@
 - Automata
 - Knuth-Morris-Pratt
 
-### #Graph
+### #Graph Algorithm
+
+- Minimum Spanning Tree(Kruskal)
