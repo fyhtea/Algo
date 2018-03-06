@@ -45,6 +45,7 @@ void kruskal(vector<Edge> &edges, int n)
 
     for(int i=0; i<edges.size(); i++ ){
         if(NodeType::find_set(node[edges[i].u]) != NodeType::find_set(node[edges[i].v])){
+            cout<<"edges["<<i<<"]"<<endl;
             SpanTree.push_back(edges[i]);
             NodeType::union_set(node[edges[i].u], node[edges[i].v]);
         }
@@ -55,7 +56,7 @@ void kruskal(vector<Edge> &edges, int n)
     for(int i = 0; i<SpanTree.size(); i++){
         cout<<SpanTree[i].u << SpanTree[i].v << SpanTree[i].w<< endl;
     }
-
+    
 }
 
 

@@ -19,9 +19,11 @@ int main(){
     in >> vertexNum >> edgeNum;
     edges.assign(edgeNum, Edge());
 
-    for(int i=0; i<vertexNum; i++){
+    for(int i=0; i<edgeNum; i++){
         in >> edges[i].u >> edges[i].v >> edges[i].w;
+        cout<<"add edges:"<<i;
     }
+    cout<<endl;
     
     kruskal(edges, vertexNum);
 
