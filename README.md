@@ -42,4 +42,4 @@
 
 ### #Graph Algorithm
 
-- Minimum Spanning Tree(Kruskal)
+- Minimum Spanning Tree(Kruskal Prim)
