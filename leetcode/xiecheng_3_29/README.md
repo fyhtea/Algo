@@ -1,6 +1,6 @@
-##携程3.29日笔试编程题目
+## 携程3.29日笔试编程题目
 
-###问题描述
+### 问题描述
 输入为数字M和M个字符串，如下：
 4
 A2B3D
@@ -15,7 +15,7 @@ C4B
 否则返回最长路径的长度，上例输出为10。
 
 
-###解决思路
+### 解决思路
 1. 字符串读取，ch='2'转换到int型可以使用ch-48,直接类型转换数值不对。
 2. 建立graph，使用邻接表形式表示， vector<vector<pair<int, int>>>>,pair中first存id，second存距离。
 3. 以每个节点为起点，使用bread first search来遍历它所能到达的节点，bfs使用数据结构为queue<int, int>，first记录id，second记录总dist。注意queue的API是front和pop，stack才是top和pop。
